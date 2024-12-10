@@ -1,0 +1,128 @@
+SlidingWindiwProtocol.java 
+
+import java.util.LinkedList;
+
+import java.util.Queue;
+
+public class SlidingWindowProtocol { 
+
+ public static void main(String[] args) { 
+
+ int windowSize = 50;
+
+ Sender sender = new Sender(windowSize);
+
+ Receiver receiver = new Receiver(windowSize);
+
+ // Simulate data transmission 
+
+ for (int i = 0; i < 10; i++) {
+
+ sender.sendFrame(i);
+
+ receiver.receiveFrame(sender.getFrame());
+
+ } 
+
+ } 
+
+} 
+
+class Frame { 
+
+ int seqNum;
+
+ String data;
+
+ public Frame(int seqNum, String data) { 
+
+ this.seqNum = seqNum;
+
+ this.data = data;
+
+ } 
+
+} 
+
+class Sender { 
+
+ private int windowSize;
+
+ private int base;
+
+ private int nextSeqNum;
+
+ private Queue<Frame> buffer;
+
+ public Sender(int windowSize) { 
+
+ this.windowSize = windowSize;
+
+ this.base = 0;
+
+ this.nextSeqNum = 0;
+this.buffer = new LinkedList<>();
+
+ }
+
+ public void sendFrame(int seqNum) {
+
+ Frame frame = new Frame(seqNum, "Data " + seqNum);
+
+ buffer.add(frame);
+
+ System.out.println("Sending frame: " + frame.seqNum);
+
+ // Simulate transmission and acknowledgment
+
+ // ... (Implement actual transmission and acknowledgment mechanisms)
+
+ // For now, assume all frames are received successfully
+
+ base++;
+
+ }
+
+ public Frame getFrame() {
+
+ return buffer.poll();
+
+ }
+
+}
+
+class Receiver {
+
+ private int windowSize;
+
+ private int expectedSeqNum;
+
+ public Receiver(int windowSize) {
+
+ this.windowSize = windowSize;
+
+ this.expectedSeqNum = 0;
+
+ }
+
+ public void receiveFrame(Frame frame) {
+
+ if (frame.seqNum == expectedSeqNum) {
+
+ System.out.println("Received frame: " + frame.seqNum);
+
+ expectedSeqNum++;
+
+ // Send acknowledgment
+
+ } else {
+
+ System.out.println("Received out-of-order frame: " + frame.seqNum);
+
+ // Handle out-of-order frames, e.g., buffer or discard
+
+ }
+
+ }
+
+}
